@@ -91,7 +91,7 @@
         font-size: 5em;
         background-color: #124c63;
         color: rgb(252, 240, 240);
-        width: 25em;
+        width: 20em;
         height: 7mm;
         line-height: 1.8em;
         text-align: left;
@@ -112,7 +112,7 @@
         font-size: 5em;
         background-color: #f3f3f3;
         color: rgb(3, 2, 2);
-        width: 25em;
+        width: 20em;
         height: 32px;
         line-height: 3em;
         text-align: left;
@@ -131,7 +131,7 @@
     .book_descript_drafts:hover{
         height:unset;     
     }
-    .github_button{
+    /* .github_button{
         background-color: #4CAF50;
         border: none;
         color: white;
@@ -142,4 +142,4 @@
         font-size: 16px;
         margin: 4px 2px;
         cursor: pointer;
-    }
+    } */

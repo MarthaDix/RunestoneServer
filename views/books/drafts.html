@@ -44,9 +44,9 @@
                 {{ for book in book_list: }}
                 
                 <form action="" method="post">
-                    <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px;" name="foo" value="upvote">Clone</button>
+                    <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" name="foo" value="upvote">Fork</button>
                 </form>
-                <div id='list' class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 70px;">
+                <div id='list' class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 60px;">
                     <div class="book_title_drafts"> {{=book['title']}}
                         <a href="{{=book['url']}}"> 
                         <span class="link1"></span> 
@@ -66,6 +66,12 @@
               <h4>My Custom Textbooks</h4>
               <p>Custom books will appear here once cloned</p>
             </div>
+        </div>
+        <div>
+            <a href="https://github.com/">
+                <img alt="Github Logo" src="../static/images/GitHub.png" style="padding: 25px;">
+            </a>
+            <p style="margin-left: 150px; margin-top: -50px;">OAuth Here </p>
         </div>
 
             The books published on Runestone are all licensed under the Creative Commons CC-BY
