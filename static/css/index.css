@@ -143,3 +143,19 @@
         margin: 4px 2px;
         cursor: pointer;
     } */
+
+    .column {
+        float: left;
+        width: 50%;
+        padding: 10px;
+      }
+      
+      .row {
+          background-color:rgb(238, 238, 238);
+      }
+      
+      .row:after {
+        content: "";
+        display: table;
+        clear: both;
+      }

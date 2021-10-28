@@ -7,9 +7,60 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
-<h3>{{=message}}</h3>
+<!-- <h3>{{=message}}</h3> -->
 
-<p><strong>MAIN</strong> <a href="{{=URL('course')}}">course</a>  <a href="{{=URL('book')}}">book</a> PLS</p>
+<!-- <p><strong>MAIN</strong> <a href="{{=URL('course')}}">course</a>  <a href="{{=URL('book')}}">book</a> PLS</p> -->
+<style>
+        /* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 20%;
+  padding: 10px;
+}
+
+.row {
+    background-color: white;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+<div class="container">
+    <div class="col-md-8 col-md-offset-2">
+        <h2>{{=message}}</h2>
+        <p>
+            Welcome to the course designers page. 
+            You can choose to make a course based on a preexisting book or you can build your own custom textbook from one of the current books. 
+            If you are a student or independent learner you do not need to build a course.
+        </p>
+        <!-- <a href="{{=URL('course')}}">course</a>  <a href="{{=URL('book')}}">book</a>
+        <button onclick="{{=URL('course')}}">TEST</button> -->
+        <!-- <form action="{{=URL('course')}}">
+            <button type="submit" style="font-size: 16px; background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; margin-top: 20px;">Build a Course</button>
+         </form>
+         <form action="{{=URL('book')}}">
+            <button type="submit" style="font-size: 16px; background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; margin: -100px 150px">Create a Custom Textbook</button>
+         </form>
+         <p> </p> -->
+
+         <div class="row">
+            <div class="column">
+                <form action="{{=URL('course')}}">
+                    <button type="submit" style="font-size: 16px; background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; ">Build a Course</button>
+                 </form>
+            </div>
+            <div class="column">
+                <form action="{{=URL('book')}}">
+                    <button type="submit" style="font-size: 16px; background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; ">Create a Custom Textbook</button>
+                 </form>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 {{pass}}
 
