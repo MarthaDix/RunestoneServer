@@ -46,39 +46,41 @@
             <button type="submit" style="font-size: 16px; background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; margin: -100px 150px">Create a Custom Textbook</button>
          </form>
          <p> </p> -->
+        <div style="display: inline-block; margin: 20px;">
+            <div class="row">
+                <div class="column" style="width: 350px;">
+                    <form action="{{=URL('course')}}">
+                        <button type="submit"
+                            style="font-size: 26px; background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; ">Build
+                            a Course Textbook</button>
+                    </form>
+                    <div class="column" style="width: 350px;"></div>
+                    <p>Buidling a course allows you to select a book for your own class. Once you have selected and
+                        built
+                        the
+                        book, you will be able to create assignments for your students. These assignments will be
+                        publish
+                        right
+                        in the book. As the instructor, You can grade your students homework, and have access to a
+                        dashboard
+                        that allows you to monitor student progress. </p>
+                </div>
 
-        <div class="row">
-            <div class="column" style="width: 350px;">
-                <form action="{{=URL('course')}}">
-                    <button type="submit"
-                        style="font-size: 26px; background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; ">Build
-                        a Course Textbook</button>
-                </form>
-                <p>Buidling a course allows you to select a book for your own class. Once you have selected and built
-                    the
-                    book, you will be able to create assignments for your students. These assignments will be publish
-                    right
-                    in the book. As the instructor, You can grade your students homework, and have access to a dashboard
-                    that allows you to monitor student progress. To begin, enter a course name below. Selecting an
-                    appropriate course level will help us to recommend questions and practice exercises from the
-                    question
-                    bank.</p>
+                <div class="column" style="width: 75px;"></div>
+                <div class="column" style="width: 350px;">
+                    <form action="{{=URL('book')}}">
+                        <button type="submit"
+                            style="font-size: 26px; background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; ">Create
+                            a Custom Textbook</button>
+                    </form>
+                    <div class="column" style="width: 350px;"></div>
+                    <p>This page can be used to create custom textbooks to fit your classes needs. To start, log into
+                        Github.
+                        Then, find the textbook you would like and use the clone button which forks the book into your
+                        Github.
+                        You can use the left hand panel to view the book in its current state and publish it.</p>
+                </div>
             </div>
-
-            <div class="column" style="width: 75px;"></div>
-            <div class="column" style="width: 400px;">
-                <form action="{{=URL('book')}}">
-                    <button type="submit"
-                        style="font-size: 26px; background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; padding: 7px; ">Create
-                        a Custom Textbook</button>
-                </form>
-                <p>This page can be used to create custom textbooks to fit your classes needs. To start, log into
-                    Github.
-                    Then, find the textbook you would like and use the clone button which forks the book into your
-                    Github.
-                    You can use the left hand panel to view the book in its current state and publish it.</p>
-            </div>
-
 
         </div>
     </div>
