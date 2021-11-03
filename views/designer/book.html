@@ -138,26 +138,25 @@ $(document).on("click", ".cloneButton", function () {
                     </div>
                     <script  src="../static/js/books.js"></script>
                     
-                    <h4>Textbooks:</h4>
-                   
-        
-
-                    {{ for book in book_list: }}
-                
-                    <form action="" method="post">
+                    <h4>Textbooks:</h4>          
+                  
+                      {{ for book in book_list: }}
+                      
+                      <form action="" method="post">
                         <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" name="foo" value="upvote">Fork</button>
                     </form>
-                    <div id='list' class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 60px;">
-                        <div class="book_title_drafts"> {{=book['regname']}}
-                            <a href="{{=book['url']}}"> 
-                            <span class="link1"></span> 
-                            </a>
-                        </div>
-                        <div class="book_descript_drafts" ><b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
-                        </div>
-                    </div>
-                
-                    {{pass}}
+                      <div id='list' class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 60px;">
+                          <div class="book_title_title"> {{=book['regname']}}
+                              <a href="{{=book['url']}}"> 
+                              <span class="link1"></span> 
+                              </a>
+                          </div>
+                          <div class="book_descript"><b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
+                          </div>
+                      </div>
+                  
+                      {{pass}}
+                      <script  src="../static/js/books.js"></script>
         
                   
                   </div>    
