@@ -71,8 +71,35 @@
             </div>
             
             <h4>Textbooks:</h4>
-          
+           
 
+            {{   book_list = os.listdir("applications/{}/books".format(request.application))
+            book_list = [book for book in book_list if ".git" not in book]}}
+
+            {{print(book_list)}}
+
+            {{ for book in book_list: }}
+              {{print(book)}}
+              {{book}}
+              
+            <form action="" method="post">
+                <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" name="foo" value="upvote">Fork</button>
+            </form>
+            <div id='list' class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 60px;">
+                <div class="book_title_drafts"> {{=book}}
+                    <a href="{{=book}}"> 
+                    <span class="link1"></span> 
+                    </a>
+                </div>
+                <div class="book_descript_drafts" ><b>Description:</b> {{=book}} To register for this book use the code <code>{={book}}</code> <br> <p style="display: none;"> keywords: {{=book}}</p>  
+                </div>
+            </div>
+              
+
+              
+
+                
+            {{pass}}
 
           
           </div>    

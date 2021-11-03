@@ -4,6 +4,8 @@ from os import path
 import random
 import datetime
 import logging
+import importlib
+
 
 logger = logging.getLogger(settings.logger)
 logger.setLevel(settings.log_level)
@@ -45,14 +47,11 @@ def callback():
 
 @auth.requires_login()
 def book():
-    basicvalues = {}
-    if settings.academy_mode:
-        basicvalues["message"] = T("Build a Custom Course")
-        basicvalues["descr"] = T(
-            """This page allows you to select a book for your own class. You will have access to all student activities in your course.
-        To begin, enter a project name below."""
-        )
-    return basicvalues
+    if len(request.args) == 0:
+        return index()
+    return _route_book()
+
+    
 
 @auth.requires_login()
 def course():
@@ -166,3 +165,5 @@ def course_build():
         # )
 
         return dict(coursename=request.vars.projectname, basecourse=base_course)
+
+
