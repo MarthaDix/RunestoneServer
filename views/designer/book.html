@@ -170,8 +170,34 @@ $(document).on("click", ".cloneButton", function () {
                   
                   </div>    
                   <div class="column">
-                    <h4>My Custom Textbooks</h4>
-                    <p>Custom books will appear here once cloned</p>
+                    <h4 style="margin-bottom: 20px;">My Custom Textbooks</h4>
+                    <!-- Use books from book_list rn but change to be custom books -->
+                    {{ for book in book_list: }}
+                    <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none;" name="foo" value="upvote">Info</button>
+                      <div id='list' class='library_entry' style="margin-top: 10px; margin-bottom: 20px;">
+                        <div style="display: inline-block; margin-left: 60px; margin-top: -40px;">
+                          <div class="draft_title book_title_drafts"> {{=book['regname']}}
+                              <a href="{{=book['url']}}"> 
+                              <span class="link1"></span> 
+                              </a>
+                          </div>
+                          <div class="book_descript_drafts" ><b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
+                          </div>
+                        </div>
+                        <div style="margin-top: 5px;">
+                          <div style="width: 300px; padding: 5px; border: 1px solid rgb(36, 35, 35);background-color: #f3f3f3; border-radius: 5px; margin-left: 25px;">
+                            <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px; margin: 5px">View Draft</button>
+                            <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px;">View Published</button>
+                            <p style="font-size: 12px; position: relative; display: inline-block;">Publish</p>
+                            <label class="switch">
+                              <input type="checkbox" checked>
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
+
+                        </div>
+                      </div>
+                    {{pass}}
                   </div>
                 
                 
