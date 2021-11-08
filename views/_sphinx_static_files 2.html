@@ -1,0 +1,158 @@
+{{ base_static_url = get_course_url('_static') }}
+
+<!--
+Sphinx includes
+===============
+These files are copied from a Sphinx build.
+-->
+<link rel="stylesheet" href="{{=base_static_url}}/pygments.css" type="text/css" />
+<link rel="stylesheet" href="{{=base_static_url}}/basic.css" type="text/css" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/accessibility.css?v=ACB8D062" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/CodeChat.css" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/matrixeq.css?v=EA7C0F6C" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/webgldemo.css?v=4EB84728" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/webglinteractive.css?v=21C88BC4" />
+<link rel="stylesheet" type="text/css" href="{{=base_static_url}}/theme-overrides.css?v=9D08EA4" />
+<script src="{{=base_static_url}}/jquery.js"></script>
+<script src="{{=URL('static', 'js/jquery-fix.js')}}"></script>
+
+
+{{  import json
+    from pathlib import Path
+
+    # Import webpack CSS and JS.
+    with open(Path(
+        request.folder,
+        "books",
+        course["base_course"],
+        "published",
+        course["base_course"],
+        "_static/webpack_static_imports.json"
+    ), encoding="utf-8") as f:
+        wp_imports = json.load(f)
+    pass
+    for css_import in wp_imports["css"]:
+        response.write(f'<link rel="stylesheet" type="text/css" href="{base_static_url}/{css_import}" />\n', escape=False)
+    pass
+    for js_import in wp_imports["js"]:
+        response.write(f"<script src='{base_static_url}/{js_import}'></script>\n", escape=False)
+    pass
+}}
+
+<script id="documentation_options" data-url_root="./" src="{{=base_static_url}}/documentation_options.js"></script>
+
+<script src="{{=base_static_url}}/underscore.js"></script>
+<script src="{{=base_static_url}}/doctools.js"></script>
+<script src="{{=base_static_url}}/animationbase.js?v=B45130AE"></script>
+<script src="{{=base_static_url}}/html4css1.css?v=62F7CBB1"></script>
+<script src="{{=base_static_url}}/matrixeq.js?v=1FB22B23"></script>
+<script src="{{=base_static_url}}/webglinteractive.js?v=7D80F988"></script>
+<script src="{{=base_static_url}}/FileSaver.min.js?v=8B232E7A"></script>
+
+
+<!--
+Common includes
+===============
+These are used in several places in the instructor interface. TODO: identify where these are used.
+-->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
+
+<!-- TODO: load this dynamically from the e-book's webpack instead. -->
+<script src="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/handsontable@7.2.2/dist/handsontable.full.min.css" rel="stylesheet" media="screen">
+
+<script type="text/javascript" src="{{=URL('static', 'js/superfish.js')}}"></script>
+
+<script src="{{=URL('static', 'js/jquery.datetimepicker.full.min.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{=URL('static', 'jquery.datetimepicker.min.css')}}" />
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [['\\(','\\)']]
+        },
+        asciimath2jax: {
+            ignoreClass: ".*",
+            processClass: "has_am"
+        },
+        jax: ["input/AsciiMath"],
+        extensions: ["asciimath2jax.js"],
+        TeX: {
+            extensions: ["extpfeil.js", "autobold.js", "https://pretextbook.org/js/lib/mathjaxknowl.js", "AMScd.js", ],
+            // scrolling to fragment identifiers is controlled by other Javascript
+            positionToHash: false,
+            equationNumbers: { autoNumber: "none", useLabelIds: true, },
+            TagSide: "right",
+            TagIndent: ".8em",
+    Macros: {    },
+        },
+        // HTML-CSS output Jax to be dropped for MathJax 3.0
+        "HTML-CSS": {
+            scale: 88,
+            mtextFontInherit: true,
+        },
+        CommonHTML: {
+            scale: 88,
+            mtextFontInherit: true,
+        },
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+<style>
+    .completed {
+        list-style-image: url('{{=base_static_url}}/completed.png');
+    }
+    .started {
+        list-style-type: circle;
+        list-style-image: url('{{=base_static_url}}/active.png');
+    }
+    .gradeablerow:hover {
+        background-color: #cccccc;
+    }
+    .gradeablerow {
+        color: blue;
+        text-decoration: underline;
+    }
+    .clipcopy:active {
+	    background-color: lightblue;
+    }
+    .graphwrapper {
+        display: grid;
+        grid-template-columns: 50% 50%;
+    }
+
+</style>
+
+
+<script>
+    $('#hideId').css('display','none');
+</script>
+
+<script type="text/javascript">
+  if(typeof eBookConfig === "undefined") {
+      eBookConfig = {};
+  }
+  eBookConfig.host = '';
+  eBookConfig.app = eBookConfig.host+'/{{=request.application}}';
+  eBookConfig.ajaxURL = eBookConfig.app+'/ajax/';
+  eBookConfig.course = "{{=course['course_name']}}";
+  eBookConfig.logLevel = 10;
+  eBookConfig.loginRequired = true;
+  eBookConfig.python3 = true ? "{{=course['python3']}}" == "True" : false;
+  {{ if 'auth' in globals() and auth.user: }}
+  eBookConfig.username = "{{=auth.user.username}}"
+  eBookConfig.email = "{{=auth.user.email}}"
+    {{ if 'is_instructor' in globals(): }}
+        eBookConfig.isInstructor = {{ =is_instructor }};
+    {{pass}}
+  {{pass}}
+  eBookConfig.isLoggedIn = true ? "{{='auth' in globals()}}" == "True" : false;
+  eBookConfig.useRunestoneServices = true;
+  eBookConfig.basecourse = "{{=course['base_course']}}";
+  eBookConfig.gradeRecordingUrl = `${eBookConfig.app}/assignments/record_grade`;
+</script>
