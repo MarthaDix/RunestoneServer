@@ -13,6 +13,25 @@
             before you make a course.
         </p>
         <div class="searchbar">
+            <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
+        </div>
+        <b style="font-size: 25px;">Computer Science Textbooks:</b>
+        
+            {{ for book in book_list: }}
+            
+            <div id='list' class='library_entry'>
+                <div class="book_title"> {{=book['title']}}
+                    <a href="{{=book['url']}}"> 
+                    <span class="link1"></span> 
+                    </a>
+                </div>
+                <div class="book_descript"><b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
+                </div>
+            </div>
+        
+            {{pass}}
+            <script  src="../static/js/books.js"></script>
+        <div class="searchbar">
             <input type="text" id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
         </div>
         <b style="font-size: 25px;">Computer Science Textbooks:</b>

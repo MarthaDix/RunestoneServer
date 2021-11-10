@@ -117,90 +117,116 @@ $(document).on("click", ".cloneButton", function () {
     <div class="modal-dialog">
       <div class="modal-content">
         <!-- Modal Header -->
-<div>
-  <div class="container">
-    <div class="col-md-8 col-md-offset-2">
-      <h2>New Book Registry</h2>
-      <p>
-        There are many free and open source textbooks available on Runestone.Academy.
-        However, sometimes these books don't match the content taught in certain classes.
-        This page can be used to create custom textbooks to fit your classes needs.
-        To start, log into Github.
-        Then, find the textbook you would like and use the clone button which forks the book into your Github.
-        You can use the left hand panel to view the book in its current state and publish it.
-      </p>
-      <div class="row">
-        <div class="column">
-          <h4>Available Textbooks</h4>
-          <script src="../static/js/books.js"></script>
-          <div class="searchbar" style="margin-top: 10px; margin-bottom: 20px;">
-            <input type="text" id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
-          </div>
+        <div>
+          <div class="container">
+            <div class="col-md-8 col-md-offset-2">
+                <h2>New Book Registry</h2>
+                <p>
+                    There are many free and open source textbooks available on Runestone.Academy. 
+                    However, sometimes these books don't match the content taught in certain classes. 
+                    This page can be used to create custom textbooks to fit your classes needs.
+                    To start, log into Github. 
+                    Then, find the textbook you would like and use the clone button which forks the book into your Github.
+                    You can use the left hand panel to view the book in its current state and publish it.
+                </p>
+                <div class="row">
+                  <div class="column">
+                    <h4>Available Textbooks</h4>
+                    <script  src="../static/js/books.js"></script>
+                    <div class="searchbar" style="margin-top: 10px; margin-bottom: 20px;">
+                      <input type="text"  id="searchbar" onkeyup="search_book()" placeholder="Search by topic..">
+                    </div>
+                    <h4>Textbooks:</h4>
 
-
-          <h4>Textbooks:</h4>
-
-          {{ for book in book_list: }}
-
-
-          <div id="list" class="library_entry"
-            style="margin-top: -25px; margin-bottom: 20px; margin-left: 10px; margin-top: 10px;">
-            <button class="btn_book"
-              style="background-color: #116cc3; text-align: center; color: white; border-radius: 3px; margin: -1px; border: none;"
-              name="foo" value="upvote">Fork</button>
-            <div class="book_title"> {{=book['regname']}}
-              <a href="{{=book['url']}}">
-                <span class="link1"></span>
-              </a>
-            </div>
-            <div class="book_descript"><b>Description:</b> {{=book['course_description']}} To register for this book use
-              the code <code>{{=book['regname']}}</code> <br>
-              <p style="display: none;"> keywords: {{=book['key_words']}}</p>
-            </div>
-          </div>
-
-          {{pass}}
-          <script src="../static/js/books.js"></script>
-
-
-        </div>
-
-        <div class="column">
-          <h4>My Custom Textbooks</h4>
-          <p>Custom books will appear here once cloned</p>
-
-          <button class="btn_book"
-            style="background-color: #116cc3; text-align: center; color: white; border-radius: 3px; margin: -1px; border: none;"
-            name="foo" value="upvote">Button1</button>
-          <button class="btn_book"
-            style="background-color: #116cc3; text-align: center; color: white; border-radius: 3px; margin: -1px; border: none;"
-            name="foo" value="upvote">Button2</button>
-          <button class="btn_book"
-            style="background-color: #116cc3; text-align: center; color: white; border-radius: 3px; margin: -1px; border: none;"
-            name="foo" value="upvote">Button3</button>
+                    {{ for book in book_list: }}
           
-            {{ for book in book_list: }}
-          <div class="column"></div>
-          <div class="book_descript"><b>"Name":</b> {{=book['course_description']}} Description of book created
-            <code>{{=book['regname']}}</code> <br>
-            <p style="display: none;"> keywords: {{=book['key_words']}}</p>
-            <button class="btn_book"
-              style="background-color: #116cc3; text-align: center; color: white; border-radius: 3px; margin: -1px; border: none;"
-              name="foo" value="upvote">Button4</button>
-            <button class="btn_book"
-              style="background-color: #116cc3; text-align: center; color: white; border-radius: 3px; margin: -1px; border: none;"
-              name="foo" value="upvote">Button5</button>
-            <label class="switch" for="checkbox">
-              <input type="checkbox" id="checkbox" />
-              <div class="slider round"></div>
-            </label>
+          
+                    <div id="list" class="library_entry"
+                      style="margin-top: -25px; margin-bottom: 20px; margin-left: 10px; margin-top: 10px;">
+                      <button class="btn_book"
+                        style="background-color: #116cc3; text-align: center; color: white; border-radius: 3px; margin: -1px; border: none;"
+                        name="foo" value="upvote">Fork</button>
+                      <div class="book_title"> {{=book['regname']}}
+                        <a href="{{=book['url']}}">
+                          <span class="link1"></span>
+                        </a>
+                      </div>
+                      <div class="book_descript"><b>Description:</b> {{=book['course_description']}} To register for this book use
+                        the code <code>{{=book['regname']}}</code> <br>
+                        <p style="display: none;"> keywords: {{=book['key_words']}}</p>
+                      </div>
+                    </div>
+          
+                    {{pass}}
+                    <script src="../static/js/books.js"></script>
+          
+          
+                  </div>
+                    
+                 <!--   <h4>Textbooks:</h4>          
+                  
+                      {{ for book in book_list: }}
+                      
+                      <form action="" method="post">
+                        <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none" name="foo" value="upvote">Fork</button>
+                    </form>
+                      <div id='list' class='library_entry' style="margin-top: -25px; margin-bottom: 20px; margin-left: 60px;">
+                          <div class="book_title_drafts"> {{=book['regname']}}
+                              <a href="{{=book['url']}}"> 
+                              <span class="link1"></span> 
+                              </a>
+                          </div>
+                          <div class="book_descript_drafts"><b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
+                          </div>
+                      </div>
+                  
+                      {{pass}}
+                      <script  src="../static/js/books.js"></script>
+        
+                  
+                  </div>  */-->
+                    
+                  <div class="column">
+                    <h4 style="margin-bottom: 20px;">My Custom Textbooks</h4>
+                    <!-- Use books from book_list rn but change to be custom books -->
+                    {{ for book in book_list: }}
+                    <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none;" name="foo" value="upvote">Info</button>
+                      <div id='list' class='library_entry' style="margin-top: 10px; margin-bottom: 20px;">
+                        <div style="display: inline-block; margin-left: 60px; margin-top: -40px;">
+                          <div class="draft_title book_title_drafts"> {{=book['regname']}}
+                              <a href="{{=book['url']}}"> 
+                              <span class="link1"></span> 
+                              </a>
+                          </div>
+                          <div class="book_descript_drafts" ><b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
+                          </div>
+                        </div>
+                        <div style="margin-top: 5px;">
+                          <div style="width: 300px; padding: 5px; border: 1px solid rgb(36, 35, 35);background-color: #f3f3f3; border-radius: 5px; margin-left: 25px;">
+                            <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px; margin: 5px">View Draft</button>
+                            <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; border: none; height: 25px;">View Published</button>
+                            <p style="font-size: 12px; position: relative; display: inline-block;">Publish</p>
+                            <label class="switch">
+                              <input type="checkbox" checked>
+                              <span class="slider round"></span>
+                            </label>
+                          </div>
 
-          </div>
-          {{pass}}
-          <script src="../static/js/books.js"></script>
-        </div>
+                        </div>
+                      </div>
+                    {{pass}}
+                  </div>
+                
+                
+             <!--   </div>
+              <div class="modal-header">
+                <button class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span> <span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myAddModalLabel">Connect with Github</h4>
+              </div> -->
 
-      </div>
+         
+
+
 
 
 
@@ -212,7 +238,7 @@ $(document).on("click", ".cloneButton", function () {
       <h4 class="modal-title" id="myAddModalLabel">Connect with Github</h4>
     </div>
 
-    <div style="margin: 15px;">
+    <div style="margin: 5px;">
       <div style="display: inline-block; vertical-align: top;">
         <a href="https://github.com/">
           <img alt="Github Logo" src="../static/images/GitHub.png">
@@ -247,26 +273,24 @@ $(document).on("click", ".cloneButton", function () {
             {{ else: }}
             <p>You need to log into Github first <a
                 href="https://github.com/login/oauth/authorize?scope=repo&client_id={{=github['client_id']}}"
-                class="button">Click here</a> to begin!</a></p>
+                class="button">Click here</a> to begin!</p>
             {{ pass }}
           </div>
         </div>
 
       </div>
-    </div>
+    </div> 
 
-    <!-- Modal Footer -->
+    <!-- Modal Footer 
     <div class="modal-footer">
       <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
-    </div>
+    </div>-->
 
   </div>
 </div>
 </div>
 
-</div>
-</div>
-</div>
+
 
 
 {{block right_sidebar}}
