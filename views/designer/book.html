@@ -114,7 +114,7 @@ $(document).on("click", ".editButton", function () {
       <div class="column">
         <h4 style="margin-bottom: 20px;">My Custom Textbooks</h4>
         <!-- Use books from book_list rn but change to be custom books -->
-        {{ for book in book_list: }}
+        {{ for book in custom_book_list: }}
         <button style="background-color: #116cc2; text-align: center; color: white; border-radius: 3px; margin: -10px 2px; border: none;" name="foo" value="upvote">Info</button>
         <div id='list' class='library_entry' style="margin-top: 10px; margin-bottom: 20px;">
           <div style="display: inline-block; margin-left: 60px; margin-top: -40px;">
@@ -124,7 +124,7 @@ $(document).on("click", ".editButton", function () {
               </a>
             </div>
             <div class="book_descript_drafts" >
-              <b>Description:</b> {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> 
+              <b>Description:</b>{{=book['github_account']}} {{=book['course_description']}} To register for this book use the code <code>{{=book['regname']}}</code> <br> 
               <p style="display: none;"> keywords: {{=book['key_words']}}</p>  
             </div>
           </div>
@@ -171,6 +171,7 @@ $(document).on("click", ".editButton", function () {
             <input type="text"  id="baseBook" name="baseBook" value="">
             <input type="text"  id="changeType" name="changeType" value="">
             <input type="text"  id="oldGithubRepo" name="oldGithubRepo" value="">
+            <input type="text"  id="oldBookIdentifier" name="oldBookIdentifier" value="">
             <div class="form-group">
               <label for="newGithubRepo">Github Repo</label> <input class="form-control" id="newGithubRepo" name="newGithubRepo" placeholder="Enter Github repo where the book will be stored" type="text">
               <label for="newBookIdentifier">Book Identifier</label> <input class="form-control" id="newBookIdentifier" name="newBookIdentifier" placeholder="Enter Book Identifier" type="text">

@@ -1,6 +1,7 @@
 //This is the JavaScript function of the search bar of the library
 
 function search_book() {
+    alert("hi")
     let input = document.getElementById('searchbar').value
     input = input.toLowerCase();
     let x = document.getElementsByClassName('book_title');

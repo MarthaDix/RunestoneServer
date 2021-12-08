@@ -38,181 +38,206 @@ logger.setLevel(settings.log_level)
 
 # Supporting functions
 # ====================
-def _route_book(is_published=True):
-    # Get the base course passed in ``request.args[0]``, or return a 404 if that argument is missing.
-    base_course = request.args(0)
+def _route_book(is_published=True, is_custom=False,custom_published=False):
+    print("start of route")
+    print(request.args)
     motd = ""
     donated = False
     attrdict = {}
     settings.show_rs_banner = False
-    if not base_course:
-        raise HTTP(404)
-
-    # Does this book originate as a Runestone book or a PreTeXt book.
-    # if it is pretext book we use different delimiters for the templates
-    # as LaTeX is full of {{
-    # These values are set by the runestone process-manifest command
-    res = getCourseOrigin(base_course)
-    if res and res.value == "PreTeXt":
-        response.delimiters = settings.pretext_delimiters
-
-    # See `caching selects <http://web2py.com/books/default/chapter/29/06/the-database-abstraction-layer#Caching-selects>`_.
-    cache_kwargs = dict(cache=(cache.ram, 3600), cacheable=True)
-    allow_pairs = "false"
-    downloads_enabled = "false"
-    # Find the course to access.
-    if auth.user:
-        # Given a logged-in user, use ``auth.user.course_id``.
-        response.cookies["last_course"] = auth.user.course_name
-        response.cookies["last_course"]["expires"] = 24 * 3600 * 90  # 90 day expiration
-        response.cookies["last_course"]["path"] = "/"
-
-        # Get `course info <courses table>`.
-        course = (
-            db(db.courses.id == auth.user.course_id)
-            .select(
-                db.courses.id,
-                db.courses.course_name,
-                db.courses.base_course,
-                db.courses.allow_pairs,
-                db.courses.downloads_enabled,
-                db.courses.term_start_date,
-                db.courses.courselevel,
-                **cache_kwargs,
-            )
-            .first()
-        )
-        if auth.user.donated:
-            donated = True
-
-        # Ensure the base course in the URL agrees with the base course in ``course``.
-        # If not, ask the user to select a course.
-        if not course or course.base_course != base_course:
-            session.flash = "{} is not the course you are currently in,  switch to or add it to go there".format(
-                base_course
-            )
-            redirect(URL(c="default", f="courses"))
-
-        attrdict = getCourseAttributesDict(course.id)
-        # set defaults for various attrs
-        if "enable_compare_me" not in attrdict:
-            attrdict["enable_compare_me"] = "true"
-
-        # Determine if we should ask for support
-        # Trying to do banner ads during the 2nd and 3rd weeks of the term
-        # but not to high school students or if the instructor has donated for the course
-        now = datetime.datetime.utcnow().date()
-        week2 = datetime.timedelta(weeks=2)
-        week4 = datetime.timedelta(weeks=4)
-        if (
-            now >= (course.term_start_date + week2)
-            and now <= (course.term_start_date + week4)
-            and course.base_course != "csawesome"
-            and course.courselevel != "high"
-            and getCourseAttribute(course.id, "supporter") is None
-        ):
-            settings.show_rs_banner = True
-        elif course.course_name == course.base_course and random.random() <= 0.2:
-            # Show banners to base course users 20% of the time.
-            settings.show_rs_banner = True
-
-        allow_pairs = "true" if course.allow_pairs else "false"
-        downloads_enabled = "true" if course.downloads_enabled else "false"
-        # Ensure the user has access to this book.
-        if (
-            is_published
-            and not db(
-                (db.user_courses.user_id == auth.user.id)
-                & (db.user_courses.course_id == auth.user.course_id)
-            )
-            .select(db.user_courses.id, **cache_kwargs)
-            .first()
-        ):
-            session.flash = "Sorry you are not registered for this course.  You can view most Open courses if you log out"
-            redirect(URL(c="default", f="courses"))
-
-    else:
-        # Get the base course from the URL.
-        if "last_course" in request.cookies:
-            last_base = (
-                db(db.courses.course_name == request.cookies["last_course"].value)
-                .select(db.courses.base_course)
-                .first()
-            )
-            if last_base and last_base.base_course == base_course:
-                # The user is trying to access the base course for the last course they logged in to
-                # there is a 99% chance this is an error and we should make them log in.
-                session.flash = "You most likely want to log in to access your course"
-                redirect(URL(c="default", f="courses"))
-        response.serve_ad = True
-        course = (
-            db(db.courses.course_name == base_course)
-            .select(
-                db.courses.id,
-                db.courses.course_name,
-                db.courses.base_course,
-                db.courses.login_required,
-                db.courses.allow_pairs,
-                db.courses.downloads_enabled,
-                **cache_kwargs,
-            )
-            .first()
-        )
-
-        if not course:
-            # This course doesn't exist.
+    if not is_custom:
+        static_checker = 1
+        # Get the base course passed in ``request.args[0]``, or return a 404 if that argument is missing.
+        base_course = request.args(0)
+        if not base_course:
             raise HTTP(404)
 
-        attrdict = getCourseAttributesDict(course.id)
-        # set defaults for various attrs
-        if "enable_compare_me" not in attrdict:
-            attrdict["enable_compare_me"] = "true"
+        # Does this book originate as a Runestone book or a PreTeXt book.
+        # if it is pretext book we use different delimiters for the templates
+        # as LaTeX is full of {{
+        # These values are set by the runestone process-manifest command
+        res = getCourseOrigin(base_course)
+        if res and res.value == "PreTeXt":
+            response.delimiters = settings.pretext_delimiters
 
-        # Require a login if necessary.
-        if course.login_required:
-            # Ask for a login by invoking the auth decorator.
-            @auth.requires_login()
-            def dummy():
-                pass
+        # See `caching selects <http://web2py.com/books/default/chapter/29/06/the-database-abstraction-layer#Caching-selects>`_.
+        cache_kwargs = dict(cache=(cache.ram, 3600), cacheable=True)
+        allow_pairs = "false"
+        downloads_enabled = "false"
+        # Find the course to access.
+        if auth.user:
+            # Given a logged-in user, use ``auth.user.course_id``.
+            response.cookies["last_course"] = auth.user.course_name
+            response.cookies["last_course"]["expires"] = 24 * 3600 * 90  # 90 day expiration
+            response.cookies["last_course"]["path"] = "/"
 
-            dummy()
-            # This code should never run!
-            assert False
+            # Get `course info <courses table>`.
+            course = (
+                db(db.courses.id == auth.user.course_id)
+                .select(
+                    db.courses.id,
+                    db.courses.course_name,
+                    db.courses.base_course,
+                    db.courses.allow_pairs,
+                    db.courses.downloads_enabled,
+                    db.courses.term_start_date,
+                    db.courses.courselevel,
+                    **cache_kwargs,
+                )
+                .first()
+            )
+            if auth.user.donated:
+                donated = True
 
-    # Make this an absolute path.
-    book_path = safe_join(
-        os.path.join(
-            request.folder,
-            "books",
-            base_course,
-            "published" if is_published else "build",
-            base_course,
-        ),
-        *request.args[1:],
-    )
+            # Ensure the base course in the URL agrees with the base course in ``course``.
+            # If not, ask the user to select a course.
+            if not course or course.base_course != base_course:
+                session.flash = "{} is not the course you are currently in,  switch to or add it to go there".format(
+                    base_course
+                )
+                redirect(URL(c="default", f="courses"))
+
+            attrdict = getCourseAttributesDict(course.id)
+            # set defaults for various attrs
+            if "enable_compare_me" not in attrdict:
+                attrdict["enable_compare_me"] = "true"
+
+            # Determine if we should ask for support
+            # Trying to do banner ads during the 2nd and 3rd weeks of the term
+            # but not to high school students or if the instructor has donated for the course
+            now = datetime.datetime.utcnow().date()
+            week2 = datetime.timedelta(weeks=2)
+            week4 = datetime.timedelta(weeks=4)
+            if (
+                now >= (course.term_start_date + week2)
+                and now <= (course.term_start_date + week4)
+                and course.base_course != "csawesome"
+                and course.courselevel != "high"
+                and getCourseAttribute(course.id, "supporter") is None
+            ):
+                settings.show_rs_banner = True
+            elif course.course_name == course.base_course and random.random() <= 0.2:
+                # Show banners to base course users 20% of the time.
+                settings.show_rs_banner = True
+
+            allow_pairs = "true" if course.allow_pairs else "false"
+            downloads_enabled = "true" if course.downloads_enabled else "false"
+            # Ensure the user has access to this book.
+            if (
+                is_published
+                and not db(
+                    (db.user_courses.user_id == auth.user.id)
+                    & (db.user_courses.course_id == auth.user.course_id)
+                )
+                .select(db.user_courses.id, **cache_kwargs)
+                .first()
+            ):
+                session.flash = "Sorry you are not registered for this course.  You can view most Open courses if you log out"
+                redirect(URL(c="default", f="courses"))
+
+        else:
+            # Get the base course from the URL.
+            if "last_course" in request.cookies:
+                last_base = (
+                    db(db.courses.course_name == request.cookies["last_course"].value)
+                    .select(db.courses.base_course)
+                    .first()
+                )
+                if last_base and last_base.base_course == base_course:
+                    # The user is trying to access the base course for the last course they logged in to
+                    # there is a 99% chance this is an error and we should make them log in.
+                    session.flash = "You most likely want to log in to access your course"
+                    redirect(URL(c="default", f="courses"))
+            response.serve_ad = True
+            course = (
+                db(db.courses.course_name == base_course)
+                .select(
+                    db.courses.id,
+                    db.courses.course_name,
+                    db.courses.base_course,
+                    db.courses.login_required,
+                    db.courses.allow_pairs,
+                    db.courses.downloads_enabled,
+                    **cache_kwargs,
+                )
+                .first()
+            )
+
+            if not course:
+                # This course doesn't exist.
+                raise HTTP(404)
+
+            attrdict = getCourseAttributesDict(course.id)
+            # set defaults for various attrs
+            if "enable_compare_me" not in attrdict:
+                attrdict["enable_compare_me"] = "true"
+
+            # Require a login if necessary.
+            if course.login_required:
+                # Ask for a login by invoking the auth decorator.
+                @auth.requires_login()
+                def dummy():
+                    pass
+
+                dummy()
+                # This code should never run!
+                assert False
+            # Make this an absolute path.
+        book_path = safe_join(
+            os.path.join(
+                request.folder,
+                "books",
+                base_course,
+                "published" if is_published else "build",
+                base_course,
+            ),
+            *request.args[1:],
+        )
+    else:
+        static_checker = 2
+        book_path = safe_join(
+            os.path.join(
+                request.folder,
+                "custom_books",
+                "published" if custom_published else "drafts",
+                request.args[0],
+                request.args[1],
+                "published" if is_published else "build",
+                request.args[1],
+            ),
+            *request.args[2:],
+        )
+    print(book_path)
+    print(request.args)
     if not book_path:
         logger.error("No Safe Path for {}".format(request.args[1:]))
         raise HTTP(404)
 
+    print("ayo")
+    
     # See if this is static content. By default, the Sphinx static directory names are ``_static`` and ``_images``.
-    if request.args(1) in ["_static", "_images"] or book_path.endswith(
+    if request.args(static_checker) in ["_static", "_images"] or book_path.endswith(
         ("css", "png", "jpg")
     ):
         # See the `response <http://web2py.com/books/default/chapter/29/04/the-core#response>`_.
         # Warning: this is slow. Configure a production server to serve this statically.
+        print("cringe")
         return response.stream(book_path, 2 ** 20, request=request)
 
     # It's HTML -- use the file as a template.
     #
     # Make sure the file exists. Otherwise, the rendered "page" will look goofy.
+    print(book_path)
     if not os.path.isfile(book_path):
         logger.error("Bad Path for {} given {}".format(book_path, request.args[1:]))
         raise HTTP(404)
     response.view = book_path
     chapter = os.path.split(os.path.split(book_path)[0])[1]
     subchapter = os.path.basename(os.path.splitext(book_path)[0])
+    print(chapter, subchapter)
     div_counts = {}
-    if auth.user:
+    if auth.user and not is_custom:
+        print("if")
         user_id = auth.user.username
         email = auth.user.email
         is_logged_in = "true"
@@ -238,6 +263,7 @@ def _route_book(is_published=True):
         for row in sid_counts:
             div_counts[row.div_id] = 1
     else:
+        print("else")
         user_id = "Anonymous"
         email = ""
         is_logged_in = "false"
@@ -246,30 +272,30 @@ def _route_book(is_published=True):
         reading_list = session.readings
     else:
         reading_list = "null"
-
-    try:
-        db.useinfo.insert(
-            sid=user_id,
-            act="view",
-            div_id=book_path,
-            event="page",
-            timestamp=datetime.datetime.utcnow(),
-            course_id=course.course_name,
-        )
-    except Exception as e:
-        logger.error(
-            "failed to insert log record for {} in {} : {} {} {}".format(
-                user_id, course.course_name, book_path, "page", "view"
+    if not is_custom:
+        try:
+            db.useinfo.insert(
+                sid=user_id,
+                act="view",
+                div_id=book_path,
+                event="page",
+                timestamp=datetime.datetime.utcnow(),
+                course_id=course.course_name,
             )
+        except Exception as e:
+            logger.error(
+                "failed to insert log record for {} in {} : {} {} {}".format(
+                    user_id, course.course_name, book_path, "page", "view"
+                )
+            )
+            logger.error("Database Error Detail: {}".format(e))
+
+        user_is_instructor = (
+            "true"
+            if auth.user and verifyInstructorStatus(auth.user.course_name, auth.user)
+            else "false"
         )
-        logger.error("Database Error Detail: {}".format(e))
-
-    user_is_instructor = (
-        "true"
-        if auth.user and verifyInstructorStatus(auth.user.course_name, auth.user)
-        else "false"
-    )
-
+    print("end2")
     # Support Runestone Campaign
     #
     # settings.show_rs_banner = True  # debug only
@@ -288,23 +314,63 @@ def _route_book(is_published=True):
     if subchapter == "Exercises":
         questions = _exercises(base_course, chapter)
     logger.debug("QUESTIONS = {} {}".format(subchapter, questions))
-    return dict(
-        course_name=course.course_name,
-        base_course=base_course,
-        is_logged_in=is_logged_in,
-        user_id=user_id,
-        user_email=email,
-        is_instructor=user_is_instructor,
-        allow_pairs=allow_pairs,
-        readings=XML(reading_list),
-        activity_info=json.dumps(div_counts),
-        downloads_enabled=downloads_enabled,
-        subchapter_list=_subchaptoc(base_course, chapter),
-        questions=questions,
-        motd=motd,
-        banner_num=banner_num,
-        **attrdict,
-    )
+    #print(attrdict, downloads_enabled)
+    # print(dict(
+    #         course_name=course.course_name,
+    #         base_course=base_course,
+    #         is_logged_in=is_logged_in,
+    #         user_id=user_id,
+    #         user_email=email,
+    #         is_instructor=user_is_instructor,
+    #         allow_pairs=allow_pairs,
+    #         readings=XML(reading_list),
+    #         activity_info=json.dumps(div_counts),
+    #         downloads_enabled=downloads_enabled,
+    #         subchapter_list=_subchaptoc(base_course, chapter),
+    #         questions=questions,
+    #         motd=motd,
+    #         banner_num=banner_num,
+    #         **attrdict,
+    #     ))
+    if not is_custom:
+        return dict(
+            course_name=course.course_name,
+            base_course=base_course,
+            is_logged_in=is_logged_in,
+            user_id=user_id,
+            user_email=email,
+            is_instructor=user_is_instructor,
+            allow_pairs=allow_pairs,
+            readings=XML(reading_list),
+            activity_info=json.dumps(div_counts),
+            downloads_enabled=downloads_enabled,
+            subchapter_list=_subchaptoc(base_course, chapter),
+            questions=questions,
+            motd=motd,
+            banner_num=banner_num,
+            **attrdict,
+        )
+    else:
+        print("good")
+        print(is_logged_in, user_id, email,reading_list,div_counts)
+        print(attrdict)
+        return dict(
+            course_name="null",
+            base_course="null",
+            is_logged_in=is_logged_in,
+            user_id=user_id,
+            user_email=email,
+            is_instructor="false",
+            allow_pairs="false",
+            readings=XML(reading_list),
+            activity_info=json.dumps(div_counts),
+            downloads_enabled="false",
+            subchapter_list=[],
+            questions=questions,
+            motd=motd,
+            banner_num=banner_num,
+            enable_compare_me="true",
+        )
 
 
 def _subchaptoc(course, chap):
@@ -399,9 +465,19 @@ def drafts():
 
 # Serve from the ``published`` directory, instead of the ``build`` directory.
 def published():
+    print("start of published")
+    print(request.args)
     if len(request.args) == 0:
         return index()
     return _route_book()
+
+def custom_books():
+    print("start of custom")
+    print(request.args)
+    if len(request.args) <= 1:
+        return index()
+    print("yabba")
+    return _route_book(is_custom=True)
 
 
 def index():
